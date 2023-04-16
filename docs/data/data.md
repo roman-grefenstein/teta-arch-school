@@ -8,89 +8,109 @@
 ```plantuml
 @startuml
 ' Логическая модель данных в варианте UML Class Diagram (альтернатива ER-диаграмме).
-namespace ShoppingCart {
 
- class ShoppingCart
- {
-  id : string
-  createDate : datetime
-  updateDate : datetime
-  customer : Customer
-  price : ShoppingCartPrice
-  cartItems : CartItem[]
- }
+namespace HelloConf {
+    class Conference
+    {
+        id : int
+        name : string
+        link : string
+        state : ConferenceState
+        dateStart : datetime
+        dateFinish : datetime
+        createdAt : datetime
+        updatedAt : datetime
+    }
 
- class ShoppingCartPrice
- {
-  type : CartItemPrice
- }
- class CartItemPrice
- {
-  type : CartItemPriceType
- }
+    class User
+    {
+        id : string        
+        name : string
+        login : string
+        role : Role
+        createdAt : datetime
+        updatedAt : datetime
+    }
 
- enum CartPriceType
- {
-  total
-  grandTotal
-  offeringDiscount
-  couponsDiscount
- }
+    class ReportAuthor
+    {
+        id : string
+        name : string
+        phone : string
+        email : string
+        createdAt : datetime
+        updatedAt : datetime
+    }
 
- class CartItem
- {
-  id : string
-  quantity : int
-  offering : Offering
-  relationship : CartItemRelationShip[]
-  price : CartItemPrice[]
-  status : CartItemStatus
- }
+    class Report
+    {
+        id : string
+        autor : ReportAuthor
+        name : string
+        text : string
+        state : ReportState
+        user : User
+        file : string
+        link : string
+        createdAt : datetime
+        updatedAt : datetime
+    }
 
-  class Customer
- {
-  id : string
- }
- 
- class Offering
- {
-  id : string
-  isQuantifiable : boolean
-  actionType : OfferingActionType
-  validFor : ValidFor
- }
-  
- class ProductSpecificationRef
- {
-  id : string
- }
- 
- ShoppingCart *-- "1..*" ShoppingCartPrice
- ShoppingCartPrice -- CartPriceType
- ShoppingCart *-- "*" CartItem
- CartItem *-- "*" CartItemPrice
- CartItemPrice -- CartPriceType
- CartItem *-- "1" Offering
- Offering *-- "1" ProductSpecificationRef
- Offering *-- "0..1" ProductConfiguration
- ShoppingCart *-- "1" Customer
+    class Schedule
+    {
+        id : string
+        name : string
+        text : text        
+        report : Report
+        dateStart : datetime
+        dateFinish : datetime
+        createdAt : datetime
+        updatedAt : datetime
+    }
+
+    class Feedback
+    {
+        id : string
+        name : string
+        email : string
+        text : string
+        createdAt : datetime
+        updatedAt : datetime
+    }
+
+    enum ConferenceState
+    {
+        init
+        planning
+        online
+        finished
+    }
+
+    enum ReportState
+    {
+        init        
+        reviewing
+        rejected
+        reviewed
+        confirmed        
+    }
+
+    enum Role
+    {
+        administrator
+        reviewer
+    }
+
+    Conference -- ConferenceState
+    Conference *-- "0..*" Schedule    
+    Report -- User
+    ReportAuthor *-- "1..*" Report
+    Report -- ReportState    
+    Schedule -- Report
+    Report *-- "0..*" Feedback
+    Schedule -- User
+    User -- Role
 }
 
-namespace Ordering {
- ProductOrder *-- OrderItem
- OrderItem *-- Product
- Product *-- ProductSpecificationRef
- ProductOrder *-- Party
-}
-
-namespace ProductCatalog {
- ShoppingCart.ProductSpecificationRef ..> ProductSpecification : ref
- Ordering.ProductSpecificationRef ..> ProductSpecification : ref
-}
-
-namespace CX {
- ShoppingCart.Customer ..> Customer : ref
- Ordering.Party ..> Customer : ref
-}
 @enduml
 ```
