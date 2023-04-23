@@ -1,0 +1,102 @@
+openapi: 3.0.2
+info:
+  title: FastAPI Presentations
+  version: 0.1.0
+paths:
+  /presentations/{title}:
+    get:
+      summary: Read Presentation
+      operationId: read_presentation_presentations__title__get
+      parameters:
+        - required: true
+          schema:
+            title: Title
+            type: string
+          name: title
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresentationsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /presentations:
+    get:
+      summary: Get All Presentations
+      operationId: get_all_presentations_presentations_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PresentationsResponse'
+              example:
+                - title: First Presentation
+                  author_id: 1
+                  date: 23.02.2023
+                - title: Second Presentation
+                  author_id: 2
+                  date: 23.02.2023
+
+components:
+  schemas:
+    Presentation:
+      type: object
+      required:
+        - title
+        - author_id
+        - date
+      properties:        
+        title:
+          type: string
+        author_id:
+          type: integer                  
+        date:
+          type: string
+          format: date
+      example:
+        title: Second Presentation
+        author_id: 2
+        date: 23.02.2023
+    PresentationsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Presentation' 
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string

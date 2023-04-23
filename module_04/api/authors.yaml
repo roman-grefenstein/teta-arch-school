@@ -1,0 +1,102 @@
+openapi: 3.0.2
+info:
+  title: FastAPI Authors
+  version: 0.1.0
+paths:
+  /authors/{author_id}:
+    get:
+      summary: Read Author
+      operationId: read_author_authors__author_id__get
+      parameters:
+        - required: true
+          schema:
+            title: Author Id
+            type: integer
+          name: author_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthorsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    AuthorsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Author'      
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      example:      
+        loc:
+        - path
+        - author_id
+        msg: value is not a valid integer
+        type: type_error.integer
+    Author:
+      type: object
+      required:
+        - id
+        - first_name
+        - last_name
+        - email
+        - title
+        - birth_date
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        title:
+          type: string
+        birth_date:
+          type: string
+          format: date-time
+      example:
+        id: 1
+        first_name: Liam
+        last_name: Moore
+        email: Liam_Moore4478@iaart.store
+        title: Call Center Representative
+        birth_date: '1981-11-27 13:44:56Z' 
