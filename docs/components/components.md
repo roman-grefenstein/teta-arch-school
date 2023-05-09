@@ -23,11 +23,8 @@ Person_Ext(user, "Слушатель", "Участник конференции,
 
 System_Boundary(is, "Информационная система HelloConf") {
 
-   Container(fe_web, "Клиентское веб-приложение", "html, JavaScript, Angular", "Сайт конференции")
-
-   Container(fe_admin, "Административный интерфейс", "html, JavaScript, Angular", "Админка")
-
    Container_Boundary(conference_context, "Конференции") {
+      Container(fe_admin, "Административный интерфейс", "html, JavaScript, Angular", "Админка")
       Container(conferences_service, "Сервис для управления конференциями", "Golang", "Сервис управления продуктовым предложением", $tags = "microService")
       Container(users_service, "Сервис для управления пользователями административного интерфейса", "Golang", "Сервис управления пользователями админки", $tags = "microService")
       ContainerDb(conferences_db, "Конференции", "PostgreSQL", "Хранение данных по конференции", $tags = "storage")
@@ -35,6 +32,7 @@ System_Boundary(is, "Информационная система HelloConf") {
    }
 
    Container_Boundary(report_context, "Доклады") {
+      Container(fe_web, "Клиентское веб-приложение", "html, JavaScript, Angular", "Сайт конференции")
       Container(authors_service, "Сервис для управления авторами докладов", "Golang", "Сервис управления авторами", $tags = "microService")
       Container(reports_service, "Сервис для управления докладами", "Golang", "Сервис управления докладами", $tags = "microService")
       Container(feedback_service, "Сервис для управления отзывами", "Golang", "Сервис управления отзывами", $tags = "microService")
